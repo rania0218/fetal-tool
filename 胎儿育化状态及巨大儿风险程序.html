@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>五运六气胎儿育化状态及巨大儿风险评估工具</title>
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Microsoft YaHei', sans-serif;
+    background: linear-gradient(135deg, #f0f7ff 0%, #e6f0ff 100%);
+    min-height: 100vh;
+    padding: 20px;
+    color: #2c3e50;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(31, 38, 135, 0.15);
+    overflow: hidden;
+}
+
+.header {
+    background: linear-gradient(135deg, #2c3e50 0%, #1a2530 100%);
+    color: white;
+    padding: 30px;
+    text-align: center;
+}
+
+.header h1 {
+    font-size: 2.2em;
+    margin-bottom: 10px;
+}
+
+.header p {
+    opacity: 0.85;
+}
+
+.input-section {
+    padding: 30px;
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.input-section h3 {
+    text-align: center;
+    margin-bottom: 25px;
+    font-size: 1.3em;
+}
+
+.date-inputs {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.date-inputs input {
+    padding: 12px 15px;
+    border: 1px solid #d0e0f0;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 120px;
+    text-align: center;
+    background: white;
+}
+
+/* 年份提示样式 */
+.year-hint {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    color: #64748b;
+    background: #f1f5f9;
+    padding: 8px 15px;
+    border-radius: 8px;
+    display: inline-block;
+    margin: 0 auto 20px;
+    border: 1px solid #e2e8f0;
+}
+
+.diabetes-select {
+    margin: 20px auto 25px;
+    text-align: center;
+}
+
+.diabetes-select select {
+    padding: 10px 20px;
+    border: 1px solid #d0e0f0;
+    border-radius: 8px;
+    font-size: 16px;
+    background: white;
+    min-width: 180px;
+}
+
+.query-btn {
+    display: block;
+    margin: 0 auto;
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border: none;
+    padding: 14px 40px;
+    border-radius: 10px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 15px rgba(52, 152, 219, 0.3);
+    font-weight: 500;
+}
+
+.query-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(52, 152, 219, 0.4);
+}
+
+.output-section {
+    padding: 30px;
+    min-height: 300px;
+}
+
+.result-card {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 20px;
+    border: 1px solid #e2e8f0;
+}
+
+.result-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.result-item {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+}
+
+.result-item .label {
+    font-size: 0.9em;
+    color: #64748b;
+    margin-bottom: 5px;
+}
+
+.result-item .value {
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.risk-assessment {
+    margin-top: 25px;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.macrosomia-risk {
+    background: #fff9e6;
+    border: 1px solid #ffd166;
+}
+
+.no-risk-message {
+    background: #e8f5e9;
+    border: 1px solid #a5d6a7;
+    text-align: center;
+    padding: 20px;
+}
+
+.risk-level {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-weight: 600;
+    margin-top: 10px;
+    font-size: 1em;
+}
+
+.risk-increase {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.risk-decrease {
+    background: #d4edda;
+    color: #155724;
+}
+
+.loading {
+    display: none;
+    text-align: center;
+    padding: 30px;
+}
+
+.loading-spinner {
+    border: 4px solid rgba(200, 220, 240, 0.5);
+    border-top: 4px solid #3498db;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.reference-section {
+    margin-top: 20px;
+    padding: 25px;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+}
+
+.reference-section h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #2c3e50;
+}
+
+.reference-section h4 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #4a5568;
+    font-size: 1em;
+    font-weight: normal;
+    background: #edf2f7;
+    padding: 8px 15px;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.reference-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 15px;
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
+.reference-item {
+    background: white;
+    padding: 15px;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+    font-size: 0.9em;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.reference-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+}
+
+.reference-item strong {
+    display: block;
+    margin-bottom: 8px;
+    color: #2c3e50;
+    font-size: 1.1em;
+}
+
+.wuyun-display {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 500;
+    margin-right: 5px;
+    font-size: 0.9em;
+}
+
+.wuyun-角- { background: #ffebee; color: #c62828; }
+.wuyun-角+ { background: #e8f5e9; color: #2e7d32; }
+.wuyun-商- { background: #fff3e0; color: #ef6c00; }
+.wuyun-商+ { background: #f3e5f5; color: #6a1b9a; }
+.wuyun-羽- { background: #e3f2fd; color: #1565c0; }
+.wuyun-羽+ { background: #e0f2f1; color: #00695c; }
+.wuyun-徵- { background: #fce4ec; color: #880e4f; }
+.wuyun-徵+ { background: #fff3e0; color: #ff6f00; }
+.wuyun-宫- { background: #e8eaf6; color: #3949ab; }
+.wuyun-宫+ { background: #f1f8e9; color: #558b2f; }
+
+.sitian-display, .zaiquan-display {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    margin-right: 5px;
+}
+
+.liuqi-少阴君火 { background: #ffebee; color: #c62828; }
+.liuqi-阳明燥金 { background: #e8f5e9; color: #2e7d32; }
+.liuqi-太阴湿土 { background: #fff3e0; color: #ef6c00; }
+.liuqi-太阳寒水 { background: #e3f2fd; color: #1565c0; }
+.liuqi-少阳相火 { background: #f3e5f5; color: #6a1b9a; }
+.liuqi-厥阴风木 { background: #e0f2f1; color: #00695c; }
+
+/* 免责声明部分样式 */
+.disclaimer-section {
+    margin-top: 20px;
+    padding: 25px;
+    background: linear-gradient(135deg, #fff9e6 0%, #fff3cd 100%);
+    border-top: 1px solid #ffe69c;
+    border-radius: 0 0 15px 15px;
+}
+
+.disclaimer-section h3 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: #856404;
+    font-size: 1.2em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.disclaimer-content {
+    background: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 8px;
+    border-left: 4px solid #ffc107;
+    font-size: 0.95em;
+    line-height: 1.6;
+    color: #555;
+}
+
+.disclaimer-content p {
+    margin-bottom: 10px;
+}
+
+.disclaimer-content strong {
+    color: #856404;
+    font-weight: 600;
+}
+
+.disclaimer-footer {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed #ffe69c;
+    text-align: center;
+    color: #666;
+    font-size: 0.9em;
+    font-style: italic;
+}
+
+/* 新增样式：胎孕育化状态显示 */
+.taiyun-display {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    margin-right: 5px;
+}
+
+.taiyun-育 { background: #e8f5e9; color: #2e7d32; }
+.taiyun-静 { background: #e3f2fd; color: #1565c0; }
+.taiyun-适中 { background: #f5f5f5; color: #616161; }
+.taiyun-不成 { background: #ffebee; color: #c62828; }
+.taiyun-不育 { background: #fff3e0; color: #ef6c00; }
+.taiyun-耗 { background: #f3e5f5; color: #6a1b9a; }
+
+/* 时间分段说明样式 */
+.time-period-explanation {
+    text-align: center;
+    margin-bottom: 20px;
+    font-size: 0.9em;
+    color: #4a5568;
+    background: #edf2f7;
+    padding: 10px 15px;
+    border-radius: 8px;
+    border-left: 4px solid #3498db;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.time-period-explanation strong {
+    color: #2c3e50;
+}
+
+@media (max-width: 768px) {
+    .date-inputs {
+        flex-direction: column;
+    }
+    .date-inputs input {
+        width: 200px;
+    }
+    .header h1 {
+        font-size: 1.8em;
+    }
+    .reference-grid {
+        grid-template-columns: 1fr;
+    }
+    .disclaimer-section {
+        padding: 20px;
+    }
+    .disclaimer-content {
+        padding: 15px;
+    }
+    .time-period-explanation {
+        font-size: 0.85em;
+        padding: 8px 12px;
+    }
+}
+</style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <h1>🤰 胎孕育化及巨大儿风险评估工具</h1>
+        <p>基于五运六气理论（干支年以大寒节气为分界）</p>
+    </div>
+    
+    <div class="input-section">
+        <h3>请输入受孕日期（公历）</h3>
+        <div class="date-inputs">
+            <input type="number" id="yearInput" placeholder="年份" min="1900" max="3000" value="1987">
+            <input type="number" id="monthInput" placeholder="月份" min="1" max="12" value="1">
+            <input type="number" id="dayInput" placeholder="日期" min="1" max="31" value="30">
+        </div>
+        
+        <!-- 添加年份提示 -->
+        <div class="year-hint">📅 年份支持范围：1900年 - 3000年</div>
+        
+        <div class="diabetes-select">
+            <label for="diabetesStatus">妊娠期糖尿病情况：</label>
+            <select id="diabetesStatus">
+                <option value="no">未罹患妊娠期糖尿病</option>
+                <option value="yes">已罹患妊娠期糖尿病</option>
+            </select>
+        </div>
+        
+        <button class="query-btn" onclick="calculateRisk()">🔍 查询风险</button>
+    </div>
+    
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+        <p>正在计算中...</p>
+    </div>
+    
+    <div class="output-section" id="outputSection">
+        <div class="no-risk-message">
+            <p>请输入受孕日期并点击查询按钮</p>
+        </div>
+    </div>
+    
+    <div class="reference-section">
+        <h3>📊 六十甲子胎孕育化参考表</h3>
+        <div class="time-period-explanation">
+            <strong>时间分段说明：</strong>每年按上下半年划分，上半年为1月20日（大寒节）-7月20日，下半年为7月21日-次年1月19日
+        </div>
+        <div class="reference-grid" id="referenceGrid">
+            <!-- 动态生成参考数据 -->
+        </div>
+    </div>
+    
+    <!-- 数据说明和免责声明部分 -->
+    <div class="disclaimer-section">
+        <h3>📋 数据说明与免责声明</h3>
+        <div class="disclaimer-content">
+            <p><strong>理论基础：</strong>本工具基于《黄帝内经》五运六气理论及临床回顾性研究数据开发，旨在通过传统中医理论提供孕期风险评估参考。</p>
+            <p><strong>风险评估说明：</strong>根据五运六气理论，特别关注两种特殊情况：</p>
+            <ul style="margin-left: 20px; margin-bottom: 10px;">
+                <li>木运不及之年，未罹患妊娠期糖尿病人群，巨大儿风险升高</li>
+                <li>木运太过之年，罹患妊娠期糖尿病人群，巨大儿风险降低</li>
+            </ul>
+            <p><strong>重要提示：</strong>本工具提供的风险评估结果仅供参考，不能替代专业医疗诊断。请务必结合临床检查结果和医生专业建议制定孕期管理方案。</p>
+            <p><strong>数据来源：</strong>北京市中医药科技发展资金项目支持的临床回顾性研究。</p>
+        </div>
+        <div class="disclaimer-footer">
+            ⚠️ 本工具仅供中医理论研究和临床参考使用
+        </div>
+    </div>
+</div>
+
+<script>
+// 天干地支数组
+const tianGan = ['甲', '乙', '丙', '丁', '戊', '己', '庚', '辛', '壬', '癸'];
+const diZhi = ['子', '丑', '寅', '卯', '辰', '巳', '午', '未', '申', '酉', '戌', '亥'];
+
+// 天干对应的岁运规则
+const wuyunMap = {
+    '甲': '宫+', // 土运太过
+    '乙': '商-', // 金运不及
+    '丙': '羽+', // 水运太过
+    '丁': '角-', // 木运不及
+    '戊': '徵+', // 火运太过
+    '己': '宫-', // 土运不及
+    '庚': '商+', // 金运太过
+    '辛': '羽-', // 水运不及
+    '壬': '角+', // 木运太过
+    '癸': '徵-'  // 火运不及
+};
+
+// 根据天干获取岁运
+function getWuYun(gan) {
+    return wuyunMap[gan] || '未知';
+}
+
+// 地支对应的司天、在泉关系
+const liuQiMap = {
+    '子': { sitian: '少阴君火', zaiquan: '阳明燥金' },
+    '丑': { sitian: '太阴湿土', zaiquan: '太阳寒水' },
+    '寅': { sitian: '少阳相火', zaiquan: '厥阴风木' },
+    '卯': { sitian: '阳明燥金', zaiquan: '少阴君火' },
+    '辰': { sitian: '太阳寒水', zaiquan: '太阴湿土' },
+    '巳': { sitian: '厥阴风木', zaiquan: '少阳相火' },
+    '午': { sitian: '少阴君火', zaiquan: '阳明燥金' },
+    '未': { sitian: '太阴湿土', zaiquan: '太阳寒水' },
+    '申': { sitian: '少阳相火', zaiquan: '厥阴风木' },
+    '酉': { sitian: '阳明燥金', zaiquan: '少阴君火' },
+    '戌': { sitian: '太阳寒水', zaiquan: '太阴湿土' },
+    '亥': { sitian: '厥阴风木', zaiquan: '少阳相火' }
+};
+
+// 根据地支获取司天、在泉
+function getLiuQi(zhi) {
+    return liuQiMap[zhi] || { sitian: '未知', zaiquan: '未知' };
+}
+
+// 完整的胎孕育化数据（根据文档表格整理）
+const taiYunData = {
+    // 甲子年
+    '甲子': {上半年: '适中', 下半年: '适中'},
+    // 乙丑年
+    '乙丑': {上半年: '静（+）', 下半年: '不育（-）'},
+    // 丙寅年
+    '丙寅': {上半年: '不成（--）', 下半年: '耗（--）'},
+    // 丁卯年
+    '丁卯': {上半年: '适中', 下半年: '适中'},
+    // 戊辰年
+    '戊辰': {上半年: '育（+）', 下半年: '育（+）'},
+    // 己巳年
+    '己巳': {上半年: '适中', 下半年: '适中'},
+    // 庚午年
+    '庚午': {上半年: '适中', 下半年: '适中'},
+    // 辛未年
+    '辛未': {上半年: '静（++）', 下半年: '不育'},
+    // 壬申年
+    '壬申': {上半年: '不成（--）', 下半年: '耗（--）'},
+    // 癸酉年
+    '癸酉': {上半年: '适中', 下半年: '适中'},
+    // 甲戌年
+    '甲戌': {上半年: '育（++）', 下半年: '育（++）'},
+    // 乙亥年
+    '乙亥': {上半年: '适中', 下半年: '适中'},
+    // 丙子年
+    '丙子': {上半年: '适中', 下半年: '适中'},
+    // 丁丑年
+    '丁丑': {上半年: '静（+）', 下半年: '不育（-）'},
+    // 戊寅年
+    '戊寅': {上半年: '不成（-）', 下半年: '耗（-）'},
+    // 己卯年
+    '己卯': {上半年: '适中', 下半年: '适中'},
+    // 庚辰年
+    '庚辰': {上半年: '育（+）', 下半年: '育（+）'},
+    // 辛巳年
+    '辛巳': {上半年: '适中', 下半年: '适中'},
+    // 壬午年
+    '壬午': {上半年: '适中', 下半年: '适中'},
+    // 癸未年
+    '癸未': {上半年: '静（+）', 下半年: '不育（-）'},
+    // 甲申年
+    '甲申': {上半年: '不成', 下半年: '耗'},
+    // 乙酉年
+    '乙酉': {上半年: '适中', 下半年: '适中'},
+    // 丙戌年
+    '丙戌': {上半年: '育', 下半年: '育'},
+    // 丁亥年
+    '丁亥': {上半年: '适中', 下半年: '适中'},
+    // 戊子年
+    '戊子': {上半年: '适中', 下半年: '适中'},
+    // 己丑年
+    '己丑': {上半年: '静', 下半年: '不育（--）'},
+    // 庚寅年
+    '庚寅': {上半年: '不成（-）', 下半年: '耗（-）'},
+    // 辛卯年
+    '辛卯': {上半年: '适中', 下半年: '适中'},
+    // 壬辰年
+    '壬辰': {上半年: '育', 下半年: '育'},
+    // 癸巳年
+    '癸巳': {上半年: '适中', 下半年: '适中'},
+    // 甲午年
+    '甲午': {上半年: '适中', 下半年: '适中'},
+    // 乙未年
+    '乙未': {上半年: '静（+）', 下半年: '不育（-）'},
+    // 丙申年
+    '丙申': {上半年: '不成（--）', 下半年: '耗（--）'},
+    // 丁酉年
+    '丁酉': {上半年: '适中', 下半年: '适中'},
+    // 戊戌年
+    '戊戌': {上半年: '育（+）', 下半年: '育（+）'},
+    // 己亥年
+    '己亥': {上半年: '适中', 下半年: '适中'},
+    // 庚子年
+    '庚子': {上半年: '适中', 下半年: '适中'},
+    // 辛丑年
+    '辛丑': {上半年: '静（++）', 下半年: '不育'},
+    // 壬寅年
+    '壬寅': {上半年: '不成（--）', 下半年: '耗（--）'},
+    // 癸卯年
+    '癸卯': {上半年: '适中', 下半年: '适中'},
+    // 甲辰年
+    '甲辰': {上半年: '育（++）', 下半年: '育（++）'},
+    // 乙巳年
+    '乙巳': {上半年: '适中', 下半年: '适中'},
+    // 丙午年
+    '丙午': {上半年: '适中', 下半年: '适中'},
+    // 丁未年
+    '丁未': {上半年: '静（+）', 下半年: '不育（-）'},
+    // 戊申年
+    '戊申': {上半年: '不成（-）', 下半年: '耗（-）'},
+    // 己酉年
+    '己酉': {上半年: '适中', 下半年: '适中'},
+    // 庚戌年
+    '庚戌': {上半年: '育（+）', 下半年: '育（+）'},
+    // 辛亥年
+    '辛亥': {上半年: '适中', 下半年: '适中'},
+    // 壬子年
+    '壬子': {上半年: '适中', 下半年: '适中'},
+    // 癸丑年
+    '癸丑': {上半年: '静（+）', 下半年: '不育（-）'},
+    // 甲寅年
+    '甲寅': {上半年: '不成', 下半年: '耗'},
+    // 乙卯年
+    '乙卯': {上半年: '适中', 下半年: '适中'},
+    // 丙辰年
+    '丙辰': {上半年: '育', 下半年: '育'},
+    // 丁巳年
+    '丁巳': {上半年: '适中', 下半年: '适中'},
+    // 戊午年
+    '戊午': {上半年: '适中', 下半年: '适中'},
+    // 己未年
+    '己未': {上半年: '静', 下半年: '不育（--）'},
+    // 庚申年
+    '庚申': {上半年: '不成（-）', 下半年: '耗（-）'},
+    // 辛酉年
+    '辛酉': {上半年: '适中', 下半年: '适中'},
+    // 壬戌年
+    '壬戌': {上半年: '育', 下半年: '育'},
+    // 癸亥年
+    '癸亥': {上半年: '适中', 下半年: '适中'}
+};
+
+// 根据干支获取胎孕育化情况（考虑上半年/下半年）
+function getTaiYun(ganZhiYear, month, day) {
+    // 获取胎孕育化数据
+    const taiyun = taiYunData[ganZhiYear];
+    
+    if (!taiyun) {
+        return '正常';
+    }
+    
+    // 判断是上半年还是下半年
+    // 上半年：1月20日-7月20日
+    // 下半年：7月21日-次年1月19日
+    const isFirstHalf = isFirstHalfYear(month, day);
+    
+    return isFirstHalf ? taiyun.上半年 : taiyun.下半年;
+}
+
+// 判断日期是否属于上半年（1月20日-7月20日）
+function isFirstHalfYear(month, day) {
+    if (month === 1) {
+        return day >= 20;
+    } else if (month >= 2 && month <= 6) {
+        return true;
+    } else if (month === 7) {
+        return day <= 20;
+    } else {
+        return false;
+    }
+}
+
+// 获取胎孕育化状态的CSS类
+function getTaiYunClass(taiyunState) {
+    if (taiyunState.includes('育')) return '育';
+    if (taiyunState.includes('静')) return '静';
+    if (taiyunState.includes('适中')) return '适中';
+    if (taiyunState.includes('不成')) return '不成';
+    if (taiyunState.includes('不育')) return '不育';
+    if (taiyunState.includes('耗')) return '耗';
+    return '适中';
+}
+
+// 大寒日期表（扩展到1900-3000年）
+const dahanDates = {};
+
+// 初始化大寒日期（1900-3000年大部分为1月20日）
+for(let y = 1900; y <= 3000; y++) {
+    dahanDates[y] = 20;
+}
+
+// 修正部分年份的大寒日期
+const specialDahanDates = {
+    '1900': 21, '1904': 21, '1908': 21, '1912': 21, '1916': 21,
+    '1920': 21, '1924': 21, '1928': 21, '1932': 21, '1936': 21,
+    '1940': 21, '1944': 21, '1948': 21, '1952': 21, '1956': 20,
+    '1960': 20, '1964': 21, '1968': 21, '1972': 21, '1976': 21,
+    '1980': 21, '1984': 21, '1988': 20, '1992': 20, '1996': 21,
+    '2000': 21, '2004': 21, '2008': 21, '2012': 21, '2016': 20,
+    '2020': 20, '2024': 20, '2028': 20, '2032': 21, '2036': 20,
+    '2040': 20, '2044': 20, '2048': 20, '2052': 20, '2056': 20,
+    '2060': 20, '2064': 20, '2068': 20, '2072': 20, '2076': 20,
+    '2080': 20, '2084': 20, '2088': 20, '2092': 20, '2096': 20,
+    '2100': 20, '2104': 20, '2108': 20, '2112': 20, '2116': 20,
+    '2120': 20, '2124': 20, '2128': 20, '2132': 20, '2136': 20,
+    '2140': 20, '2144': 20, '2148': 20, '2152': 20, '2156': 20,
+    '2160': 20, '2164': 20, '2168': 20, '2172': 20, '2176': 20,
+    '2180': 20, '2184': 20, '2188': 20, '2192': 20, '2196': 20,
+    '2200': 21, '2204': 21, '2208': 21, '2212': 21, '2216': 21,
+    '2220': 21, '2224': 21, '2228': 21, '2232': 21, '2236': 20,
+    '2240': 20, '2244': 21, '2248': 21, '2252': 21, '2256': 21,
+    '2260': 21, '2264': 21, '2268': 20, '2272': 20, '2276': 21,
+    '2280': 21, '2284': 21, '2288': 21, '2292': 21, '2296': 20,
+    '2300': 21, '2304': 21, '2308': 21, '2312': 21, '2316': 21,
+    '2320': 21, '2324': 21, '2328': 21, '2332': 21, '2336': 20,
+    '2340': 20, '2344': 21, '2348': 21, '2352': 21, '2356': 21,
+    '2360': 21, '2364': 21, '2368': 20, '2372': 20, '2376': 21,
+    '2380': 21, '2384': 21, '2388': 21, '2392': 21, '2396': 20,
+    '2400': 21, '2404': 21, '2408': 21, '2412': 21, '2416': 21,
+    '2420': 21, '2424': 21, '2428': 21, '2432': 21, '2436': 20,
+    '2440': 20, '2444': 21, '2448': 21, '2452': 21, '2456': 21,
+    '2460': 21, '2464': 21, '2468': 20, '2472': 20, '2476': 21,
+    '2480': 21, '2484': 21, '2488': 21, '2492': 21, '2496': 20,
+    '2500': 21, '2504': 21, '2508': 21, '2512': 21, '2516': 21,
+    '2520': 21, '2524': 21, '2528': 21, '2532': 21, '2536': 20,
+    '2540': 20, '2544': 21, '2548': 21, '2552': 21, '2556': 21,
+    '2560': 21, '2564': 21, '2568': 20, '2572': 20, '2576': 21,
+    '2580': 21, '2584': 21, '2588': 21, '2592': 21, '2596': 20,
+    '2600': 21, '2604': 21, '2608': 21, '2612': 21, '2616': 21,
+    '2620': 21, '2624': 21, '2628': 21, '2632': 21, '2636': 20,
+    '2640': 20, '2644': 21, '2648': 21, '2652': 21, '2656': 21,
+    '2660': 21, '2664': 21, '2668': 20, '2672': 20, '2676': 21,
+    '2680': 21, '2684': 21, '2688': 21, '2692': 21, '2696': 20,
+    '2700': 21, '2704': 21, '2708': 21, '2712': 21, '2716': 21,
+    '2720': 21, '2724': 21, '2728': 21, '2732': 21, '2736': 20,
+    '2740': 20, '2744': 21, '2748': 21, '2752': 21, '2756': 21,
+    '2760': 21, '2764': 21, '2768': 20, '2772': 20, '2776': 21,
+    '2780': 21, '2784': 21, '2788': 21, '2792': 21, '2796': 20,
+    '2800': 21, '2804': 21, '2808': 21, '2812': 21, '2816': 21,
+    '2820': 21, '2824': 21, '2828': 21, '2832': 21, '2836': 20,
+    '2840': 20, '2844': 21, '2848': 21, '2852': 21, '2856': 21,
+    '2860': 21, '2864': 21, '2868': 20, '2872': 20, '2876': 21,
+    '2880': 21, '2884': 21, '2888': 21, '2892': 21, '2896': 20,
+    '2900': 21, '2904': 21, '2908': 21, '2912': 21, '2916': 21,
+    '2920': 21, '2924': 21, '2928': 21, '2932': 21, '2936': 20,
+    '2940': 20, '2944': 21, '2948': 21, '2952': 21, '2956': 21,
+    '2960': 21, '2964': 21, '2968': 20, '2972': 20, '2976': 21,
+    '2980': 21, '2984': 21, '2988': 21, '2992': 21, '2996': 20
+};
+
+// 合并特殊日期
+for (const [year, day] of Object.entries(specialDahanDates)) {
+    dahanDates[year] = day;
+}
+
+// 获取指定年份的大寒日期
+function getDahanDate(year) {
+    return dahanDates[year] || 20;
+}
+
+// 根据公历日期计算干支年份（以大寒为分界）
+function getGanZhiYear(year, month, day) {
+    // 获取当年的大寒日期
+    const dahanDay = getDahanDate(year);
+    
+    // 判断日期是否在当年大寒当天或之后
+    const isOnOrAfterDahan = (month > 1) || (month === 1 && day >= dahanDay);
+    
+    // 如果在当年大寒当天或之后，使用当前年；否则使用前一年
+    const baseYear = isOnOrAfterDahan ? year : year - 1;
+    
+    // 计算干支索引（以1924年甲子年为基准）
+    const ganZhiIndex = (baseYear - 1924) % 60;
+    const positiveIndex = ganZhiIndex >= 0 ? ganZhiIndex : ganZhiIndex + 60;
+    
+    const ganIndex = positiveIndex % 10;
+    const zhiIndex = positiveIndex % 12;
+    
+    return tianGan[ganIndex] + diZhi[zhiIndex];
+}
+
+// 获取60甲子列表（从1924年甲子年开始）
+function generateAllGanZhiYears() {
+    const ganZhiYears = [];
+    for (let i = 0; i < 60; i++) {
+        const ganIndex = i % 10;
+        const zhiIndex = i % 12;
+        ganZhiYears.push(tianGan[ganIndex] + diZhi[zhiIndex]);
+    }
+    return ganZhiYears;
+}
+
+// 评估巨大儿风险（只评估两种情况）
+function assessMacrosomiaRisk(wuyun, diabetesStatus) {
+    let riskInfo = {
+        showRisk: false,
+        riskType: '',
+        message: ''
+    };
+    
+    // 检查是否为木运不及之年（wuyun为'角-'）且未患糖尿病
+    if (wuyun === '角-' && diabetesStatus === 'no') {
+        riskInfo.showRisk = true;
+        riskInfo.riskType = 'increase';
+        riskInfo.message = '木运不及之年，未罹患妊娠期糖尿病人群，巨大儿风险升高';
+    }
+    // 检查是否为木运太过之年（wuyun为'角+'）且已患糖尿病
+    else if (wuyun === '角+' && diabetesStatus === 'yes') {
+        riskInfo.showRisk = true;
+        riskInfo.riskType = 'decrease';
+        riskInfo.message = '木运太过之年，罹患妊娠期糖尿病人群，巨大儿风险降低';
+    }
+    
+    return riskInfo;
+}
+
+// 生成参考表格
+function generateReferenceTable() {
+    const referenceGrid = document.getElementById('referenceGrid');
+    const allGanZhiYears = generateAllGanZhiYears();
+    
+    const referenceHTML = allGanZhiYears.map(ganZhiYear => {
+        // 提取天干地支
+        const gan = ganZhiYear.charAt(0);
+        const zhi = ganZhiYear.charAt(1);
+        
+        // 获取数据
+        const wuyun = getWuYun(gan);
+        const liuQi = getLiuQi(zhi);
+        const taiyunData = taiYunData[ganZhiYear];
+        
+        // 获取岁运对应的CSS类
+        const wuyunClass = `wuyun-${wuyun.replace('+', '+').replace('-', '-')}`;
+        
+        // 获取胎孕育化状态
+        const taiyunFirstHalf = taiyunData ? taiyunData.上半年 : '正常';
+        const taiyunSecondHalf = taiyunData ? taiyunData.下半年 : '正常';
+        
+        // 获取胎孕育化CSS类
+        const taiyunFirstHalfClass = getTaiYunClass(taiyunFirstHalf);
+        const taiyunSecondHalfClass = getTaiYunClass(taiyunSecondHalf);
+        
+        return `
+            <div class="reference-item">
+                <strong>${ganZhiYear}年</strong>
+                <div style="margin-top: 5px;">
+                    <span class="wuyun-display ${wuyunClass}">${wuyun}</span>
+                </div>
+                <div style="margin-top: 8px;">
+                    <span style="font-size: 0.85em; color: #64748b;">司天：</span>
+                    <span class="sitian-display liuqi-${liuQi.sitian}">${liuQi.sitian}</span>
+                </div>
+                <div style="margin-top: 5px;">
+                    <span style="font-size: 0.85em; color: #64748b;">在泉：</span>
+                    <span class="zaiquan-display liuqi-${liuQi.zaiquan}">${liuQi.zaiquan}</span>
+                </div>
+                <div style="margin-top: 5px;">
+                    <span style="font-size: 0.85em; color: #64748b;">上半年：</span>
+                    <span class="taiyun-display taiyun-${taiyunFirstHalfClass}">${taiyunFirstHalf}</span>
+                </div>
+                <div style="margin-top: 5px;">
+                    <span style="font-size: 0.85em; color: #64748b;">下半年：</span>
+                    <span class="taiyun-display taiyun-${taiyunSecondHalfClass}">${taiyunSecondHalf}</span>
+                </div>
+            </div>
+        `;
+    }).join('');
+    
+    referenceGrid.innerHTML = referenceHTML;
+}
+
+// 主计算函数
+function calculateRisk() {
+    const year = parseInt(document.getElementById('yearInput').value);
+    const month = parseInt(document.getElementById('monthInput').value);
+    const day = parseInt(document.getElementById('dayInput').value);
+    const diabetesStatus = document.getElementById('diabetesStatus').value;
+    
+    // 验证日期
+    if (!year || !month || !day) {
+        alert('请输入完整的日期！');
+        return;
+    }
+    
+    // 验证年份范围（1900-3000年）
+    if (year < 1900 || year > 3000) {
+        alert('年份必须在1900-3000年之间！');
+        return;
+    }
+    
+    if (month < 1 || month > 12) {
+        alert('月份必须在1-12之间！');
+        return;
+    }
+    
+    if (day < 1 || day > 31) {
+        alert('日期必须在1-31之间！');
+        return;
+    }
+    
+    // 显示加载状态
+    document.getElementById('loading').style.display = 'block';
+    document.getElementById('outputSection').style.display = 'none';
+    
+    setTimeout(() => {
+        // 获取干支年份（以大寒为分界）
+        const ganZhiYear = getGanZhiYear(year, month, day);
+        
+        // 提取天干地支
+        const gan = ganZhiYear.charAt(0);
+        const zhi = ganZhiYear.charAt(1);
+        
+        // 根据天干获取岁运
+        const wuyun = getWuYun(gan);
+        
+        // 根据地支获取司天、在泉
+        const liuQi = getLiuQi(zhi);
+        
+        // 获取胎孕育化情况（考虑上半年/下半年）
+        const taiyun = getTaiYun(ganZhiYear, month, day);
+        
+        // 判断是上半年还是下半年
+        const isFirstHalf = isFirstHalfYear(month, day);
+        const periodText = isFirstHalf ? '上半年（1月20日-7月20日）' : '下半年（7月21日-次年1月19日）';
+        
+        // 获取胎孕育化CSS类
+        const taiyunClass = getTaiYunClass(taiyun);
+        
+        // 评估巨大儿风险
+        const macrosomiaRisk = assessMacrosomiaRisk(wuyun, diabetesStatus);
+        
+        // 生成结果HTML
+        const resultHTML = `
+            <div class="result-card">
+                <h4>查询结果 - ${year}年${month}月${day}日</h4>
+                <div class="result-grid">
+                    <div class="result-item">
+                        <div class="label">公历日期</div>
+                        <div class="value">${year}年${month}月${day}日</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="label">所属时段</div>
+                        <div class="value">${periodText}</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="label">干支年份</div>
+                        <div class="value">${ganZhiYear}年</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="label">岁运（五音）</div>
+                        <div class="value">${wuyun}</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="label">司天</div>
+                        <div class="value">${liuQi.sitian}</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="label">在泉</div>
+                        <div class="value">${liuQi.zaiquan}</div>
+                    </div>
+                    <div class="result-item">
+                        <div class="label">胎孕育化情况</div>
+                        <div class="value">
+                            <span class="taiyun-display taiyun-${taiyunClass}">${taiyun}</span>
+                        </div>
+                    </div>
+                    <div class="result-item">
+                        <div class="label">妊娠期糖尿病情况</div>
+                        <div class="value">${diabetesStatus === 'no' ? '未罹患' : '已罹患'}</div>
+                    </div>
+                </div>
+            </div>
+            
+            ${macrosomiaRisk.showRisk ? `
+                <div class="risk-assessment macrosomia-risk">
+                    <h4>巨大儿罹患风险评估</h4>
+                    <div style="margin: 15px 0;">
+                        <strong>评估结果：</strong>
+                        <span class="risk-level ${macrosomiaRisk.riskType === 'increase' ? 'risk-increase' : 'risk-decrease'}">
+                            ${macrosomiaRisk.riskType === 'increase' ? '风险升高' : '风险降低'}
+                        </span>
+                    </div>
+                    <div style="margin-bottom: 15px;">${macrosomiaRisk.message}</div>
+                    <div style="background: #e8f4fd; padding: 12px; border-radius: 8px; font-size: 0.9em;">
+                        <strong>建议：</strong><br>
+                        ${macrosomiaRisk.riskType === 'increase' ? 
+                            '加强孕期监测，控制饮食，适当运动，定期产检，注意血糖控制。' : 
+                            '注意均衡营养，保持适度运动，按时产检，继续遵医嘱控制血糖。'}
+                    </div>
+                </div>
+            ` : `
+                <div class="risk-assessment no-risk-message">
+                    <h4>巨大儿风险评估</h4>
+                    <p>当前年份和妊娠期糖尿病情况组合下，巨大儿风险无特殊变化。</p>
+                    <p>建议保持良好生活习惯，定期产检即可。</p>
+                </div>
+            `}
+        `;
+        
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('outputSection').style.display = 'block';
+        document.getElementById('outputSection').innerHTML = resultHTML;
+    }, 600);
+}
+
+// 回车键触发查询
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+        calculateRisk();
+    }
+});
+
+// 页面加载完成后初始化
+window.addEventListener('DOMContentLoaded', () => {
+    // 生成参考表格
+    generateReferenceTable();
+    
+    // 测试用例
+    console.log('测试1987年1月30日:', getGanZhiYear(1987, 1, 30)); // 应该是丁卯
+    console.log('1987年丁卯岁运:', getWuYun('丁')); // 应该是角-
+    console.log('测试2001年1月30日:', getGanZhiYear(2001, 1, 30)); // 应该是庚辰
+    console.log('2001年庚辰岁运:', getWuYun('庚')); // 应该是商+
+});
+</script>
+</body>
+</html>
